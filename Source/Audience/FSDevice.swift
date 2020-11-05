@@ -5,7 +5,12 @@
 //  Created by Adel on 10/12/2019.
 //
 
+#if os(macOS)
+import AppKit
+#else
 import UIKit
+#endif
+
 import CoreTelephony
 //import SystemConfiguration
 
@@ -13,13 +18,15 @@ internal class FSDevice: NSObject {
     
     
     class func getDeviceLanguage()->String?{
-        
+
         return NSLocale.current.languageCode
     }
     
     
     class func getDeviceType()->String{
-        
+        #if os(macOS)
+          return "Desktop"
+        #else
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
             return "Mobile"
@@ -29,29 +36,36 @@ internal class FSDevice: NSObject {
             // Later will treat other cases
             return "Mobile"
         }
+        #endif
     }
     
     
     class func getDeviceModel()->String{
-        
+        #if os(macOS)
+        return "macOS"
+        #else
         return UIDevice.modelName
+        #endif
     }
     
     
     class func getCarrierName()->String?{
-        
-        if #available(iOS 12, *) {
-            
-            guard let dico = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders else{
-                
-                return nil
-            }
-            return dico.first?.value.carrierName
-            
-        }else{
-            
-             return CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
-         }
+        #if os(macOS)
+          return ""
+        #else
+          if #available(iOS 12, *) {
+
+              guard let dico = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders else{
+
+                  return nil
+              }
+              return dico.first?.value.carrierName
+
+          }else{
+
+               return CTTelephonyNetworkInfo().subscriberCellularProvider?.carrierName
+           }
+        #endif
     }
 
     class func isFirstTimeUser()->Bool{
@@ -90,7 +104,7 @@ internal class FSDevice: NSObject {
     }
 }
 
-
+#if !os(macOS)
 internal extension UIDevice {
 
     static let modelName: String = {
@@ -169,6 +183,4 @@ internal extension UIDevice {
     }()
 
 }
-
-
-
+#endif
