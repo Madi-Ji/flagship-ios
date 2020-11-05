@@ -5,13 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "Flagship",
-    
+
     platforms: [
-        .iOS(.v8),
-        .macOS(.v10_14),
-        .tvOS(.v9)
+      .iOS(.v8),
+      .macOS(.v10_15)
     ],
-    
+
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
